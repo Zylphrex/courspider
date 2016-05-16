@@ -38,10 +38,14 @@ class DepartmentCalender:
         # only a single h1 tag in the html, and it is the department name
         return Department(matches[0])
 
+    # please don't touch this regular expression without fully understanding it
+    # it has been adjusted after many iterations after finding strange
+    # formatting in the raw html, so any changes is not advised
+
     # regular expression used to filter out the course data
     regex = '<a name="([A-Z]{3}\\d\\d\\d[A-Z]\\d)"><\/a>'\
-            '<span class="strong">\\1\\s*(.*?)<\/span>'\
-            '<p(.*?)?>([\\s\\S]*?)<\/p>\\s*'\
+            '<span class="strong">\\1\\s*(.*?)<\/span>\\s*'\
+            '<\/?p(.*?)?>([\\s\\S]*?)<\/?p>\\s*'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
             'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?(<br>)?'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\

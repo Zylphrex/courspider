@@ -4,7 +4,11 @@ from html import unescape
 from urllib import request
 
 
-_comments = re.compile('<!--[if.*?]>.*?<![endif]-->')
+# regex used to remove comments from the raw html
+# _comments = re.compile('\\s*<!--\[if.*?\]>.*?<!\[endif\]-->\\s*', re.DOTALL)
+_comments = re.compile('\\s*<!--.*?-*>.*?<-*.*?-->\\s*', re.DOTALL)
+
+_empty_tags = re.compile('<(.*?)>\\s*<\/\\1>', re.DOTALL)
 
 def get_html(url):
     """
@@ -21,4 +25,7 @@ def get_html(url):
     # decode and unescape the raw html
     # the unescape function turns &nbsp; to some different
     # white space characters, so replace with usual ones
-    return _comments.sub("", unescape(html.decode('utf8')).replace(' ', ' '))
+    html = _comments.sub("", unescape(html.decode('utf8')).replace(' ', ' '))
+
+    # remove empty tags that contain no data
+    return _empty_tags.sub("", html)

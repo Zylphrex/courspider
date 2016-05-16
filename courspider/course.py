@@ -25,7 +25,7 @@ class Course:
                      self.distribution_requirement, self.breadth_requirement]
 
     def __str__(self):
-        delimiter = '\n' + ('-' * 80) + '\n'
+        delimiter = '\n' * 2
         return delimiter.join([label + ': ' + data for label, data in \
                 zip(Course.labels, self.data)])
 
