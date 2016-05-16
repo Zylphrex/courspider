@@ -39,19 +39,22 @@ class FacultyOfArtsAndScienceCalender(FacultyCalender):
         department_urls = []
 
         # generates a list of all the url endings found
+        print("finding all url endings to department calenders")
         for a_tag in self.soup.find_all('a'):
             url = a_tag['href']
-            
+
             if FacultyOfArtsAndScienceCalender.\
                     _match_department_calender_url(url):
-
+                print("found url endings to department calender at {}".format(url))
                 department_urls.append(url)
 
+        print("removing duplicate department url")
         # eliminate duplicate urls
         department_urls = set(department_urls)
 
         # generates a list of department calenders from the list of url endings
         for department_url in department_urls:
+            print("converting {} to full url".format(department_url))
             url = self._to_full_url(department_url)
             calender = DepartmentCalender(self.session, url)
             self.department_calenders.append(calender)

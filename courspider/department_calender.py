@@ -17,6 +17,7 @@ class DepartmentCalender:
         self.session = session
         self.url = url
         self.department = self._find_department()
+        self.courses = []
 
     def __str__(self):
         return "Session: " + str(self.session) + "\nURL: " + \
@@ -60,13 +61,15 @@ class DepartmentCalender:
     _course = re.compile(regex, re.DOTALL)
 
     def get_courses(self):
-        courses = []
+        if self.courses:
+            return self.courses
+
         courses_data = DepartmentCalender._course.findall(self.url.raw_html)
 
         for course_data in courses_data:
-            courses.append(DepartmentCalender._create_course(course_data))
+            self.courses.append(DepartmentCalender._create_course(course_data))
 
-        return courses
+        return self.courses
 
     @staticmethod
     def _create_course(data):
@@ -86,6 +89,8 @@ class DepartmentCalender:
         distribution_requirement = DepartmentCalender._erase_html(
             data[29])
         breath_requirement = DepartmentCalender._erase_html(data[32])
+
+        print("found course: {}".format(course_code))
 
         return Course(course_code, course_name, course_description,
                       exclusion, prerequisite, corequisite, recommended,

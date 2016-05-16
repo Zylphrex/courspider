@@ -20,12 +20,21 @@ def get_html(url):
     :rtype: str
     """
     with request.urlopen(url) as response:
+        print("reading raw html from {}".format(url))
         html = response.read()
 
+    print("decoding and refactoring raw html")
     # decode and unescape the raw html
+    html = unescape(html.decode('utf8'))
+
     # the unescape function turns &nbsp; to some different
     # white space characters, so replace with usual ones
-    html = _comments.sub("", unescape(html.decode('utf8')).replace(' ', ' '))
+    html = html.replace(' ', ' ')
+
+    # remove comments
+    html = _comments.sub("", html)
 
     # remove empty tags that contain no data
-    return _empty_tags.sub("", html)
+    html = _empty_tags.sub("", html)
+
+    return html

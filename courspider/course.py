@@ -29,6 +29,12 @@ class Course:
         return delimiter.join([label + ': ' + data for label, data in \
                 zip(Course.labels, self.data)])
 
+    def to_data(self):
+        course = {}
+        for label, data in zip(Course.labels, self.data):
+            course[label] = data
+        return course
+
     @staticmethod
     def _set(val):
         val = val.strip()
