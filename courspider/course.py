@@ -1,40 +1,35 @@
 class Course:
 
+    labels = ['Course code', 'Course name', 'Course description',
+             'Course exclusion', 'Course prerequisite',
+             'Course corequisite', 'Course preparation',
+             'Course distribution requirement',
+             'Course breadth requirement']
+
     def __init__(self, course_code, course_name, course_description,
-                 exclusion, prerequisite, corequisite,
-                 distribution_requirement, breadth_requirement,):
-        self.course_code = course_code
-        self.course_name = course_name
-        self.course_description = course_description
-        self.distribution_requirement = distribution_requirement
-        self.breadth_requirement = breadth_requirement
-        self.exclusion = exclusion
-        self.prerequisite = prerequisite
-        self.corequisite = corequisite
+                 exclusion, prerequisite, corequisite, recommended,
+                 distribution_requirement, breadth_requirement):
+        self.course_code = Course._set(course_code)
+        self.course_name = Course._set(course_name)
+        self.course_description = Course._set(course_description)
+        self.exclusion = Course._set(exclusion)
+        self.prerequisite = Course._set(prerequisite)
+        self.corequisite = Course._set(corequisite)
+        self.recommended = Course._set(recommended)
+        self.distribution_requirement = Course._set(distribution_requirement)
+        self.breadth_requirement = Course._set(breadth_requirement)
+
+        self.data = [self.course_code, self.course_name,
+                     self.course_description, self.exclusion,
+                     self.prerequisite, self.corequisite, self.recommended,
+                     self.distribution_requirement, self.breadth_requirement]
 
     def __str__(self):
-        string = ""
-        string += "Course code:"
-        string += self.course_code
-        string += '\n'
-        string += "Course name:"
-        string += self.course_name
-        string += '\n'
-        string += "Course description:"
-        string += self.course_description
-        string += '\n'
-        string += "Course exclusion:"
-        string += self.exclusion
-        string += '\n'
-        string += "Course prerequisite:"
-        string += self.prerequisite
-        string += '\n'
-        string += "Course corequisite:"
-        string += self.corequisite
-        string += '\n'
-        string += "Course distribution requirement:"
-        string += self.distribution_requirement
-        string += '\n'
-        string += "Course breath requirement:"
-        string += self.breadth_requirement
-        return string
+        delimiter = '\n' + ('-' * 80) + '\n'
+        return delimiter.join([label + ': ' + data for label, data in \
+                zip(Course.labels, self.data)])
+
+    @staticmethod
+    def _set(val):
+        val = val.strip()
+        return val if val is not "" else 'None'

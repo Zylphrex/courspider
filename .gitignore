@@ -63,3 +63,5 @@ target/
 
 notes.txt
 .idea/
+courspider/scrapped
+.DS_Store
