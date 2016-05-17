@@ -23,7 +23,7 @@ class FacultyOfArtsAndScienceCalendar(FacultyCalendar):
         :rtype: FacultyCalendar
         """
         super().__init__(Faculty.ARTS_AND_SCIENCE, session, url)
-        self.soup = BeautifulSoup(url.raw_html, "html5lib")
+        self.soup = BeautifulSoup(url.raw_html, "html.parser")
 
     def _generate_department_calendars_from_html(self):
         """
