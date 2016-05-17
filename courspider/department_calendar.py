@@ -1,27 +1,23 @@
 import re
 
-from faculty_calender_resources.department import Department
-from course import Course
+from courspider.faculty_calendar_resources.department import Department
+from courspider.course import Course
 
-class DepartmentCalender:
+class DepartmentCalendar:
 
     def __init__(self, session, url):
         """
-        Initialize a new Department Calender for the given url
+        Initialize a new Department Calendar for the given url
 
-        :param session: The session of the calender
+        :param session: The session of the calendar
         :type session: Session
-        :param url: The url to the specified year's calender
+        :param url: The url to the specified year's calendar
         :type url: URL
         """
         self.session = session
         self.url = url
         self.department = self._find_department()
         self.courses = []
-
-    def __str__(self):
-        return "Session: " + str(self.session) + "\nURL: " + \
-               str(self.url) + "\nDepartment: " + str(self.department)
 
     # regex used for the _find_department method
     _department_name = re.compile(r"<h1>(.*)<\/h1>")
@@ -33,7 +29,7 @@ class DepartmentCalender:
         :return: The Department
         :rtype: Department
         """
-        matches = DepartmentCalender._department_name.\
+        matches = DepartmentCalendar._department_name.\
                 findall(self.url.raw_html)
 
         # only a single h1 tag in the html, and it is the department name
@@ -61,34 +57,50 @@ class DepartmentCalender:
     _course = re.compile(regex, re.DOTALL)
 
     def get_courses(self):
+        """
+        Returns a list of all the courses in this Department Calendar.
+
+        :return: list of all courses in this DepartmentCalendar
+        :rtype: list[Course]
+        """
+        # if the list has been generated
         if self.courses:
             return self.courses
 
-        courses_data = DepartmentCalender._course.findall(self.url.raw_html)
+        # generate list if necessary
+        courses_data = DepartmentCalendar._course.findall(self.url.raw_html)
 
         for course_data in courses_data:
-            self.courses.append(DepartmentCalender._create_course(course_data))
+            self.courses.append(DepartmentCalendar._create_course(course_data))
 
-        return self.courses
+        return self.courses.copy()
 
     @staticmethod
     def _create_course(data):
+        """
+        Create a course object from the data extracted using the above regex
+
+        :param data: The data extracted using the above regex
+        :type data: tuple(str, ...)
+        :return: A course object
+        :rtype: Course
+        """
         # these numbers come from the group numbers from the regex above
         # '_course' count them if you wanna
-        course_code = DepartmentCalender._erase_html(data[0])
-        course_name = DepartmentCalender._erase_html(data[1])
-        course_description = DepartmentCalender._erase_html(data[3])
-        exclusion = DepartmentCalender._erase_html(
+        course_code = DepartmentCalendar._erase_html(data[0])
+        course_name = DepartmentCalendar._erase_html(data[1])
+        course_description = DepartmentCalendar._erase_html(data[3])
+        exclusion = DepartmentCalendar._erase_html(
             data[5] + data[11] + data[17] + data[23])
-        prerequisite = DepartmentCalender._erase_html(
+        prerequisite = DepartmentCalendar._erase_html(
             data[6] + data[12] + data[18] + data[24])
-        corequisite = DepartmentCalender._erase_html(
+        corequisite = DepartmentCalendar._erase_html(
             data[7] + data[13] + data[19] + data[25])
-        recommended = DepartmentCalender._erase_html(
+        recommended = DepartmentCalendar._erase_html(
             data[8] + data[14] + data[20] + data[26])
-        distribution_requirement = DepartmentCalender._erase_html(
+        distribution_requirement = DepartmentCalendar._erase_html(
             data[29])
-        breath_requirement = DepartmentCalender._erase_html(data[32])
+        breath_requirement = DepartmentCalendar._erase_html(data[32])
 
         print("found course: {}".format(course_code))
 
@@ -96,16 +108,16 @@ class DepartmentCalender:
                       exclusion, prerequisite, corequisite, recommended,
                       distribution_requirement, breath_requirement)
 
-    # _link = re.compile('<a href=".*?">(.*?)</a>')
-    # _break = re.compile('<br/>')
-    # _para_start = re.compile('<p>')
-    # _para_end = re.compile('</p>')
     _tags = re.compile('<.*?>', re.DOTALL)
 
     @staticmethod
     def _erase_html(data):
-        # data = DepartmentCalender._link.sub("\\1", data)
-        # data = DepartmentCalender._break.sub('', data)
-        # data = DepartmentCalender._para_start.sub('', data)
-        # data = DepartmentCalender._para_end.sub('', data)
-        return DepartmentCalender._tags.sub('', data)
+        """
+        Erases any remaining html tags in the text.
+
+        :param data: The raw data
+        :type data: str
+        :return: The data after removing remaining html tags
+        :rtype: str
+        """
+        return DepartmentCalendar._tags.sub('', data)

@@ -1,5 +1,7 @@
 class Department:
 
+    departments = {}
+
     def __init__(self, name):
         """
         Represents a department
@@ -10,8 +12,14 @@ class Department:
         self.name = name
 
     def __str__(self):
+        """
+        Return a string representation of a department
+
+        :return: string representation of a department
+        :rtype: str
+        """
         return self.name
-        
+
     def __eq__(self, other):
         """
         Returns True if this Department is equal to other.
@@ -27,3 +35,22 @@ class Department:
         if isinstance(other, self.__class__):
             return self.name == other.name
         return False
+
+    @staticmethod
+    def create(name):
+        """
+        Returns an instance of Department with the given name.
+
+        If a Department instance with the same name has already been created,
+        it will be returned
+
+        :return: a Department instance with the given name
+        :rtype: Department
+        """
+        if name in departments:
+            return departments[name]
+
+        department = Department(name)
+        departments[name] = department
+
+        return department

@@ -16,6 +16,12 @@ class Session:
         self.season = season
 
     def __str__(self):
+        """
+        Return a string representation of a Session
+
+        :return: string representation of a Session
+        :rtype: str
+        """
         return str(self.year) + str(self.season)
 
     def __eq__(self, other):

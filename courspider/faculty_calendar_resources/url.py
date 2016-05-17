@@ -1,4 +1,4 @@
-from raw_html import get_html
+from courspider.raw_html import get_html
 
 class URL:
 
@@ -13,6 +13,12 @@ class URL:
         self.raw_html = get_html(url)
 
     def __str__(self):
+        """
+        Return a string representation of a URL
+
+        :return: string representation of a URL
+        :rtype: str
+        """
         return self.url
 
     def __eq__(self, other):
