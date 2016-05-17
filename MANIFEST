@@ -6,3 +6,9 @@ courspider/course.py
 courspider/department_calendar.py
 courspider/faculty_calendar.py
 courspider/raw_html.py
+courspider/faculty_calendar_resources/__init__.py
+courspider/faculty_calendar_resources/department.py
+courspider/faculty_calendar_resources/faculty.py
+courspider/faculty_calendar_resources/faculty_of_arts_and_science_calendar.py
+courspider/faculty_calendar_resources/session.py
+courspider/faculty_calendar_resources/url.py

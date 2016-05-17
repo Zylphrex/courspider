@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
   name = 'courspider',
-  packages = ['courspider', 'faculty_calendar_resources'],
+  packages = ['courspider', 'courspider.faculty_calendar_resources'],
   version = '0.5',
   description = 'A webscraper API to scrape course data from u of t calenders',
   author = 'Tony Xiao',
