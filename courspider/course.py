@@ -1,3 +1,6 @@
+from courspider.faculty_calendar_resources.department import Department
+
+
 class Course:
 
     # all of the labels for the data of a course
@@ -5,11 +8,11 @@ class Course:
              'Course exclusion', 'Course prerequisite',
              'Course corequisite', 'Course preparation',
              'Course distribution requirement',
-             'Course breadth requirement']
+             'Course breadth requirement', 'Department']
 
     def __init__(self, course_code, course_name, course_description,
                  exclusion, prerequisite, corequisite, recommended,
-                 distribution_requirement, breadth_requirement):
+                 distribution_requirement, breadth_requirement, department):
         """
         Represents a single Course
 
@@ -32,6 +35,8 @@ class Course:
         :type distribution_requirement: str
         :param breadth_requirement: The breadth requirement of this Course
         :type breadth_requirement: str
+        :param department: The department offering this Course
+        :type department: Department
         """
         self.course_code = Course._format(course_code)
         self.course_name = Course._format(course_name)
@@ -42,11 +47,13 @@ class Course:
         self.recommended = Course._format(recommended)
         self.distribution_requirement = Course._format(distribution_requirement)
         self.breadth_requirement = Course._format(breadth_requirement)
+        self.department = department.name
 
         self.data = [self.course_code, self.course_name,
                      self.course_description, self.exclusion,
                      self.prerequisite, self.corequisite, self.recommended,
-                     self.distribution_requirement, self.breadth_requirement]
+                     self.distribution_requirement, self.breadth_requirement,
+                     self.department]
 
     def __str__(self):
         """

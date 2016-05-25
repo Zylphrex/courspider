@@ -25,18 +25,9 @@ class FacultyOfArtsAndScienceCalendar(FacultyCalendar):
         super().__init__(Faculty.ARTS_AND_SCIENCE, session, url)
         self.soup = BeautifulSoup(url.raw_html, "html.parser")
 
-    def _generate_department_calendars_from_html(self):
-        """
-        Using the unescaped raw html of the calendar, create and return all the
-        department calendars found.
-
-        :return: list of Department Calendar objects generated from this Faculty
-                 Calendar
-        :rtype: list[DepartmentCalendar]
-        """
-
-        dpeartment_calendars = []
+    def _generate_department_calender_urls(self):
         department_urls = []
+        urls = []
 
         # generates a list of all the url endings found
         print("finding all url endings to department calendars")
@@ -56,6 +47,29 @@ class FacultyOfArtsAndScienceCalendar(FacultyCalendar):
         for department_url in department_urls:
             print("converting {} to full url".format(department_url))
             url = self._to_full_url(department_url)
+            urls.append(url)
+
+        return urls
+
+    def get_departments(self):
+        """
+        Return a list of Department from this year of this Faculty
+        """
+        urls = self._generate_department_calender_urls()
+        department_names = [DepartmentCalendar.find_department_name(url) for url in urls]
+        return department_names
+
+    def _generate_department_calendars_from_html(self):
+        """
+        Using the unescaped raw html of the calendar, create and return all the
+        department calendars found.
+
+        :return: list of Department Calendar objects generated from this Faculty
+                 Calendar
+        :rtype: list[DepartmentCalendar]
+        """
+
+        for url in self._generate_department_calender_urls():
             calendar = DepartmentCalendar(self.session, url)
             self.department_calendars.append(calendar)
 

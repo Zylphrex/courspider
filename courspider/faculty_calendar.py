@@ -33,6 +33,12 @@ class FacultyCalendar:
         else:
             return self._generate_department_calendars_from_html()
 
+    def get_departments(self):
+        """
+        Return a list of Department from this year of this Faculty
+        """
+        raise NotImplementedError()
+
     def _generate_department_calendars_from_html(self):
         """
         Using the unescaped raw html of the calendar, create and return all the
