@@ -45,16 +45,21 @@ class DepartmentCalendar:
 
     # regular expression used to filter out the course data
     regex = '<a name="([A-Z]{3}\\d\\d\\d[A-Z]\\d)"><\/a>'\
-            '<span class="strong">\\1\\s*(.*?)<\/span>[\\s\\S]*?'\
-            '(<\/p>)?\s*<\/?p(.*?)?>([\\s\\S]*?)<\/?p>[\\s\\S]*?'\
+            '<span class="strong">\\1\\s*(.*?)<\/span>\\s*(<\/p>)?'\
+            '\s*<\/?p(.*?)?>(.*?)<\/?p>\\s*(<p>)?'\
+            '(\s*<p>(.*?)<\/p>)?(\s*<p>(.*?)<\/p>)?\s*(<p>)?\s*'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?(<br>)?'\
+            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
+            '(\\s*<br>)?'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?(<br>)?'\
+            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
+            '(\\s*<br>)?'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?(<br>)?'\
+            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
+            '(\\s*<br>)?'\
             '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?(<br>)?'\
+            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
+            '(\\s*<br>)?'\
             '\s*(Distribution Requirement Status:\\s*(.*?)\\s*)?(<br>)?\s*'\
             '(Breadth Requirement:\\s*(.*?)\\s*)?(<br>|<\/?p>)'
 
@@ -92,18 +97,19 @@ class DepartmentCalendar:
         # '_course' count them if you wanna
         course_code = DepartmentCalendar._erase_html(data[0])
         course_name = DepartmentCalendar._erase_html(data[1])
-        course_description = DepartmentCalendar._erase_html(data[4])
+        course_description = DepartmentCalendar._erase_html(
+            data[4] + data[7] + data[9])
         exclusion = DepartmentCalendar._erase_html(
-            data[6] + data[12] + data[18] + data[24])
+            DepartmentCalendar._select_data(data, 12))
         prerequisite = DepartmentCalendar._erase_html(
-            data[7] + data[13] + data[19] + data[25])
+            DepartmentCalendar._select_data(data, 13))
         corequisite = DepartmentCalendar._erase_html(
-            data[8] + data[14] + data[20] + data[26])
+            DepartmentCalendar._select_data(data, 14))
         recommended = DepartmentCalendar._erase_html(
-            data[9] + data[15] + data[21] + data[27])
+            DepartmentCalendar._select_data(data, 15))
         distribution_requirement = DepartmentCalendar._erase_html(
-            data[30])
-        breath_requirement = DepartmentCalendar._erase_html(data[33])
+            data[36])
+        breath_requirement = DepartmentCalendar._erase_html(data[39])
 
         print("found course: {}".format(course_code))
 
@@ -111,6 +117,12 @@ class DepartmentCalendar:
                       exclusion, prerequisite, corequisite, recommended,
                       distribution_requirement, breath_requirement,
                       self.department)
+
+    def _select_data(data, start):
+        result = ""
+        for i in range(4):
+            result += data[start + i * 4]
+        return result
 
     _tags = re.compile('<.*?>', re.DOTALL)
 
