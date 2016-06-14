@@ -44,24 +44,7 @@ class DepartmentCalendar:
     # formatting in the raw html, so any changes is not advised
 
     # regular expression used to filter out the course data
-    regex = '<a name="([A-Z]{3}\\d\\d\\d[A-Z]\\d)"><\/a>'\
-            '<span class="strong">\\1\\s*(.*?)<\/span>\\s*(<\/p>)?'\
-            '\s*<\/?p(.*?)?>(.*?)<\/?p>\\s*(<p>)?'\
-            '(\s*<p>(.*?)<\/p>)?(\s*<p>(.*?)<\/p>)?\s*(<p>)?\s*'\
-            '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
-            '(\\s*<br>)?'\
-            '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
-            '(\\s*<br>)?'\
-            '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
-            '(\\s*<br>)?'\
-            '(Exclusion:\\s*(.*?)|Prerequisite:\\s*(.*?)|'\
-            'Corequisite:\\s*(.*?)|Recommended Preparation:\\s*(.*?))?'\
-            '(\\s*<br>)?'\
-            '\s*(Distribution Requirement Status:\\s*(.*?)\\s*)?(<br>)?\s*'\
-            '(Breadth Requirement:\\s*(.*?)\\s*)?(<br>|<\/?p>)'
+    regex = r'<a name="([A-Z]{3}\d\d\d[A-Z]\d)"><\/a><span class="strong">\1\s*(.*?)<\/span>(\s*<div>)?\s*(<\/p>)?\s*<\/?(p|div)(.*?)?>(.*?)<\/?(p|div)>(\s*<\/div>)?\s*(<p>)?(\s*<(p|div)>(.*?)<\/(p|div)>)?(\s*<(p|div)>(.*?)<\/(p|div)>)?\s*(<p>)?\s*(Exclusion:\s*(.*?)|Prerequisite:\s*(.*?)|Corequisite:\s*(.*?)|Recommended Preparation:\s*(.*?))?(\s*<br>\s*)?(Exclusion:\s*(.*?)|Prerequisite:\s*(.*?)|Corequisite:\s*(.*?)|Recommended Preparation:\s*(.*?))?(\s*<br>\s*)?(Exclusion:\s*(.*?)|Prerequisite:\s*(.*?)|Corequisite:\s*(.*?)|Recommended Preparation:\s*(.*?))?(\s*<br>\s*)?(Exclusion:\s*(.*?)|Prerequisite:\s*(.*?)|Corequisite:\s*(.*?)|Recommended Preparation:\s*(.*?))?(\s*<br>\s*)?\s*(Distribution Requirement Status:\s*(.*?)\s*)?(<br>)?\s*(Breadth Requirement:\s*(.*?)\s*)?(<br>|<\/?p>)'
 
     _course = re.compile(regex, re.DOTALL)
 
@@ -98,18 +81,18 @@ class DepartmentCalendar:
         course_code = DepartmentCalendar._erase_html(data[0])
         course_name = DepartmentCalendar._erase_html(data[1])
         course_description = DepartmentCalendar._erase_html(
-            data[4] + data[7] + data[9])
+            data[6] + data[11] + data[15])
         exclusion = DepartmentCalendar._erase_html(
-            DepartmentCalendar._select_data(data, 12))
+            DepartmentCalendar._select_data(data, 20))
         prerequisite = DepartmentCalendar._erase_html(
-            DepartmentCalendar._select_data(data, 13))
+            DepartmentCalendar._select_data(data, 21))
         corequisite = DepartmentCalendar._erase_html(
-            DepartmentCalendar._select_data(data, 14))
+            DepartmentCalendar._select_data(data, 22))
         recommended = DepartmentCalendar._erase_html(
-            DepartmentCalendar._select_data(data, 15))
+            DepartmentCalendar._select_data(data, 23))
         distribution_requirement = DepartmentCalendar._erase_html(
-            data[36])
-        breath_requirement = DepartmentCalendar._erase_html(data[39])
+            data[44])
+        breath_requirement = DepartmentCalendar._erase_html(data[47])
 
         print("found course: {}".format(course_code))
 
@@ -121,7 +104,7 @@ class DepartmentCalendar:
     def _select_data(data, start):
         result = ""
         for i in range(4):
-            result += data[start + i * 4]
+            result += data[start + i * 6]
         return result
 
     _tags = re.compile('<.*?>', re.DOTALL)

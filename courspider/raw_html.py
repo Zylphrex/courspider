@@ -5,12 +5,12 @@ from urllib import request
 
 
 # regex used to remove comments from the raw html
-# _comments = re.compile('\\s*<!--\[if.*?\]>.*?<!\[endif\]-->\\s*', re.DOTALL)
-_comments = re.compile('\\s*<!--.*?-*>.*?<-*.*?-->\\s*', re.DOTALL)
+_comments = re.compile(r'\s*<!--\[[\w\s]*?\]>.*?<!\[[\w\s]*?\]-->\s*',
+                       re.DOTALL)
 
-_empty_tags = re.compile('<(.*?)>\\s*<\/\\1>', re.DOTALL)
+_empty_tags = re.compile(r'<(.*?)>\s*<\/\1>', re.DOTALL)
 
-_r_n = re.compile('(\\[rn])*', re.DOTALL)
+_r_n = re.compile(r'(\[rn])*', re.DOTALL)
 
 def get_html(url):
     """
@@ -33,14 +33,15 @@ def get_html(url):
     # white space characters, so replace with usual ones
     html = html.replace(' ', ' ')
 
-    # the single quotes don't get replaced properly so here
-    html = html.replace(r"\u2019", "'")
-    html = html.replace(r"\u2018", "'")
-
-    # some doubles quotes too....
-    html = html.replace(r"\u201c", '"')
-    html = html.replace(r"\u201d", '"')
-    html = html.replace(r'\"', '"')
+    # appears to be unnecessary as python takes care of all these special characters in what im guessing is utf-8?
+    # # the single quotes don't get replaced properly so here
+    # html = html.replace(r"\u2019", "'")
+    # html = html.replace(r"\u2018", "'")
+    #
+    # # some doubles quotes too....
+    # html = html.replace(r"\u201c", '"')
+    # html = html.replace(r"\u201d", '"')
+    # html = html.replace(r'\"', '"')
 
     # and a dash... -.-
     html = html.replace(r"\u2013", "-")
